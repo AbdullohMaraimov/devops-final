@@ -15,11 +15,24 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import static net.logstash.logback.argument.StructuredArguments.*;
+
 
 @Component
 public class ApiLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger("api_log");
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+
+        return uri.startsWith("/actuator/prometheus")
+                || uri.startsWith("/swagger")
+                || uri.startsWith("/v3/api-docs")
+                || uri.equals("/favicon.ico")
+                || uri.equals("/error");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -54,15 +67,14 @@ public class ApiLoggingFilter extends OncePerRequestFilter {
             String responseBody = safeBody(res.getContentAsByteArray());
 
             log.info(
-                    "api_called method={} path={} query={} status={} tookMs={} clientIp={} request={} response={}",
-                    method,
-                    path,
-                    query,
-                    status,
-                    tookMs,
-                    ip,
-                    requestBody,
-                    responseBody
+                    "api_called",
+                    keyValue ("method", method),
+                    keyValue("path", path),
+                    keyValue("status", status),
+                    keyValue("tookMs", tookMs),
+                    keyValue("clientIp", ip),
+                    keyValue("request", requestBody),
+                    keyValue("response", responseBody)
             );
 
             // must copy back response body or client gets empty response
