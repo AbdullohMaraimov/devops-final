@@ -6,7 +6,7 @@ app:
 
 image:
   repository: abdullohswe/demo
-  tag: "0ce3a8c11788f87236a86f17590fd0f832b32aa4"
+  tag: "b9d54536138bfc9a6abf19b9f82dee99aa92e623"
   pullPolicy: IfNotPresent
 
 service:
