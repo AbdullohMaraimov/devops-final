@@ -34,10 +34,11 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/prometheus
+              readOnly: true
             - name: storage
               mountPath: /prometheus
           resources:
-          {{- toYaml .Values.prometheus.resources | nindent 10 }}
+            {{- toYaml .Values.prometheus.resources | nindent 12 }}
           livenessProbe:
             httpGet:
               path: /-/healthy
@@ -55,5 +56,5 @@ spec:
           configMap:
             name: {{ include "demo.fullname" . }}-prometheus-config
         - name: storage
-          emptyDir: {}
-{{- end }}
+        emptyDir: {}
+  {{- end }}

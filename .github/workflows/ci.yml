@@ -31,3 +31,12 @@ jobs:
         run: |
           docker tag demo:${{ github.sha }} abdullohswe/demo:${{ github.sha }}
           docker push abdullohswe/demo:${{ github.sha }}
+
+      - name: Update Helm image tag
+        run: |
+          sed -i "s/tag: \".*\"/tag: \"${{ github.sha }}\"/g" helm/demo/values.yaml
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add helm/demo/values.yaml
+          git commit -m "chore: update image tag to ${{ github.sha }}" || echo "No changes"
+          git push

@@ -1,4 +1,4 @@
-{{- if and .Values.serviceMonitor (eq .Values.serviceMonitor.enabled true) }}
+{{- if and .Values.serviceMonitor.enabled (not (and .Values.prometheus (eq .Values.prometheus.enabled true))) }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -13,11 +13,10 @@ spec:
       - {{ .Values.app.namespace }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: demo
-      app.kubernetes.io/instance: demo
+      {{- include "demo.selectorLabels" . | nindent 6 }}
   endpoints:
     - port: http
       path: {{ .Values.serviceMonitor.path }}
       interval: {{ .Values.serviceMonitor.interval }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
-{{- end }}
+  {{- end }}

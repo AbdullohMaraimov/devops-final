@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/AbdullohMaraimov/devops-final
+    repoURL: https://github.com/AbdullohMaraimov/devops-final.git
     targetRevision: main
     path: helm/demo
     helm:

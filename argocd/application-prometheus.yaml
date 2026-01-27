@@ -9,20 +9,23 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/AbdullohMaraimov/devops-final
+    repoURL: https://github.com/AbdullohMaraimov/devops-final.git
     targetRevision: main
     path: helm/demo
     helm:
       valueFiles:
         - values.yaml
       values: |
-        monitoring:
+        prometheus:
           enabled: true
+          namespace: monitoring
+        serviceMonitor:
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
-  
+    namespace: monitoring
+
   syncPolicy:
     automated:
       prune: true
@@ -36,5 +39,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-  
+
   revisionHistoryLimit: 10

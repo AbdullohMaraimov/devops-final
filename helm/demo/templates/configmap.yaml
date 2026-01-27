@@ -15,13 +15,17 @@ data:
       endpoints:
         web:
           exposure:
-            include: health,info,prometheus
+            include: health,info,prometheus,metrics
       endpoint:
         health:
           show-details: always
           probes:
             enabled: true
       metrics:
-        export:
-          prometheus:
-            enabled: true
+        tags:
+          application: {{ .Values.app.name }}
+        web:
+          server:
+            request:
+              autotime:
+                enabled: true

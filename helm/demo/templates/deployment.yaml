@@ -1,27 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo
+  name: {{ include "demo.fullname" . }}
+  namespace: {{ .Values.app.namespace }}
+  labels:
+    {{- include "demo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: demo
+      {{- include "demo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: demo
+        {{- include "demo.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: demo
+        - name: {{ include "demo.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 9091
+            - name: http
+              containerPort: 8080
+          env:
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configtree:/config/"
           volumeMounts:
+            - name: app-config
+              mountPath: /config
+              readOnly: true
             - name: h2-data
               mountPath: /data
       volumes:
+        - name: app-config
+          configMap:
+            name: {{ include "demo.fullname" . }}-config
+            items:
+                - key: application.yaml
+                  path: application.yaml
         - name: h2-data
           persistentVolumeClaim:
             claimName: demo-h2-pvc

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface Repo extends CrudRepository<Student, Integer> {
+public interface Repo extends CrudRepository<Food, Integer> {
 }

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Student {
+public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String surname;
-    private String email;
-    private int age;
+    private String producer;
+    private String origin;
+    private int price;
 }
