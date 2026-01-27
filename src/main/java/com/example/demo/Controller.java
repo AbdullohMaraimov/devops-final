@@ -16,6 +16,8 @@ public class Controller {
     @GetMapping("/{foodId}")
     public Food get(@PathVariable Integer foodId) {
         final String api = "food_get";
+        long start = System.currentTimeMillis();
+
         apiMetrics.incRequest(api);
         try {
             Food result = service.get(foodId);
@@ -24,40 +26,35 @@ public class Controller {
         } catch (Exception e) {
             apiMetrics.incFailed(api, e.getClass().getSimpleName());
             throw e;
-        }
-    }
-
-    @PutMapping
-    public String put(@RequestBody Food food) {
-        final String api = "food_put";
-        apiMetrics.incRequest(api);
-        try {
-            String result = service.update(food);
-            apiMetrics.incSuccess(api);
-            return result;
-        } catch (Exception e) {
-            apiMetrics.incFailed(api, e.getClass().getSimpleName());
-            throw e;
+        } finally {
+            apiMetrics.recordLatencyMs(api, System.currentTimeMillis() - start);
         }
     }
 
     @PostMapping
     public Food save(@RequestBody Food food) {
         final String api = "food_save";
+        long start = System.currentTimeMillis();
+
         apiMetrics.incRequest(api);
         try {
             Food result = service.save(food);
+            apiMetrics.incFoodAdded();
             apiMetrics.incSuccess(api);
             return result;
         } catch (Exception e) {
             apiMetrics.incFailed(api, e.getClass().getSimpleName());
             throw e;
+        } finally {
+            apiMetrics.recordLatencyMs(api, System.currentTimeMillis() - start);
         }
     }
 
     @GetMapping
     public List<Food> findAll() {
         final String api = "food_find_all";
+        long start = System.currentTimeMillis();
+
         apiMetrics.incRequest(api);
         try {
             List<Food> result = service.findAll();
@@ -66,6 +63,8 @@ public class Controller {
         } catch (Exception e) {
             apiMetrics.incFailed(api, e.getClass().getSimpleName());
             throw e;
+        } finally {
+            apiMetrics.recordLatencyMs(api, System.currentTimeMillis() - start);
         }
     }
 }

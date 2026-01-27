@@ -2,7 +2,10 @@ package com.example.demo;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class ApiMetrics {
@@ -33,5 +36,21 @@ public class ApiMetrics {
                 .tag("reason", reason == null ? "unknown" : reason)
                 .register(registry)
                 .increment();
+    }
+
+    public void incFoodAdded() {
+        Counter.builder("food_added_total").register(registry).increment();
+    }
+
+    public void incFoodUpdated() {
+        Counter.builder("food_updated_total").register(registry).increment();
+    }
+
+    public void recordLatencyMs(String apiName, long ms) {
+        Timer.builder("api_latency_ms")
+                .tag("api", apiName)
+                .publishPercentileHistogram(true)
+                .register(registry)
+                .record(ms, TimeUnit.MILLISECONDS);
     }
 }
