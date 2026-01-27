@@ -22,4 +22,14 @@ public class FoodSerivce {
     public List<Food> findAll() {
         return (List<Food>) repo.findAll();
     }
+
+    public String update(Food food) {
+        Food oldFood = get(food.getId());
+        oldFood.setName(food.getName());
+        oldFood.setOrigin(food.getOrigin());
+        oldFood.setProducer(food.getProducer());
+        oldFood.setPrice(food.getPrice());
+        repo.save(oldFood);
+        return "Food updated successfully";
+    }
 }

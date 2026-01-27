@@ -27,6 +27,20 @@ public class Controller {
         }
     }
 
+    @PutMapping
+    public String put(@RequestBody Food food) {
+        final String api = "food_put";
+        apiMetrics.incRequest(api);
+        try {
+            String result = service.update(food);
+            apiMetrics.incSuccess(api);
+            return result;
+        } catch (Exception e) {
+            apiMetrics.incFailed(api, e.getClass().getSimpleName());
+            throw e;
+        }
+    }
+
     @PostMapping
     public Food save(@RequestBody Food food) {
         final String api = "food_save";
