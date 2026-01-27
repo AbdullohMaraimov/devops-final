@@ -6,7 +6,7 @@ app:
 
 image:
   repository: abdullohswe/demo
-  tag: "latest"
+  tag: "d1be4acb3a443ec550305c270d9e38bdd71c468d"
   pullPolicy: IfNotPresent
 
 service:
