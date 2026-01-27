@@ -1,11 +1,23 @@
 <configuration>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"app":"devops-final"}</customFields>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+
+                <!-- Structured fields from keyValue(...) -->
+                <arguments />
+
+                <!-- Static app name -->
+                <globalCustomFields>
+                    {"app":"devops-final"}
+                </globalCustomFields>
+
+            </providers>
         </encoder>
     </appender>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
+
 </configuration>
