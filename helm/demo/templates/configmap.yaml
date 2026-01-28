@@ -10,6 +10,19 @@ data:
     spring:
       application:
         name: {{ .Values.app.name }}
+      datasource:
+        url: jdbc:h2:mem:food
+        driverClassName: org.h2.Driver
+        username: sa
+        password:
+      jpa:
+        hibernate:
+          ddl-auto: update
+        defer-datasource-initialization: true
+        show-sql: false
+      h2:
+        console:
+          enabled: true
 
     management:
       endpoints:
